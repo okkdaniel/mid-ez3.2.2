@@ -33,78 +33,67 @@ void armTest();
 
 inline void redLeft()
 {
-  // In terms of the center of the field
-  
-  // Odom coordinate set
+  armMotor.tare_position();
+  // Odom coordinate set; relative to center of field
   chassis.odom_xyt_set(-59_in, 13_in, -144_deg);
   
   // Alliance stake
   armTarget = 490;
-  pros::delay(500);
+  pros::delay(400);
+
   // Clamp goal
   chassis.pid_odom_set({{{-55_in, 18_in}, rev, 110},
     {{-32_in, 22_in, -60_deg}, rev, 100}}, true);
-  pros::delay(700);
-  armTarget = -120;
-  
+  chassis.pid_wait_until_point({-55_in, 18_in});
+  armTarget = -250;
   chassis.pid_wait();
-  pros::delay(200);
+  pros::delay(25);
   clampControl(true);
-  pros::delay(200);
+  pros::delay(25);
   armMotor.tare_position();
-
-  IntakeTargetSpeed = 127;
-
-
-  chassis.pid_odom_set({{-18_in, 12_in}, rev, 110});
+  armTarget = 0;
+  
+  // Move to 8 ring stack and intake
+  //chassis.pid_odom_set({{-16_in, 8_in}, rev, 110});
   chassis.pid_wait();
-  chassis.pid_turn_set({-10_in,43.5_in}, fwd, 110, ez::shortest);
+  chassis.pid_turn_set({-1_in,36_in}, fwd, 110, ez::shortest);
+  chassis.pid_wait_quick();
+  IntakeTargetSpeed = 127;
+  chassis.pid_odom_set({{-14_in, 41_in, 0_deg}, fwd, 110});
+  chassis.pid_wait();
+  chassis.pid_odom_set({{{-14_in, 56_in, 0_deg}, fwd, 50}}, true);
+  chassis.pid_wait_quick();
+  
+
+  // Move to 2 ring stack and intake
+  chassis.pid_odom_set({{-14_in, 48_in, -0_deg}, rev, 110});
+  chassis.pid_wait_quick();
+  chassis.pid_turn_set({-20_in,48_in}, fwd, 110, ez::shortest);
+  chassis.pid_wait_quick();
+  chassis.pid_odom_set({{-20_in, 48_in, -90_deg}, fwd, 90});
+  chassis.pid_wait();
+
+
+  // Move to negative corner and intake bottom ring
+  chassis.pid_odom_set({{{-52_in, 52_in, -45_deg}, fwd, 110},
+    {{-65_in, 65_in, -45_deg}, fwd, 110}}, true);
   chassis.pid_wait_quick();
 
-
- // Move to 8 ring stack and intake
-  chassis.pid_odom_set({{-12_in, 44_in, 0_deg}, fwd, 80});
+  // Intake first ring
+  pros::delay(200);
+  chassis.pid_odom_set({{-61_in, 61_in, -45_deg}, rev, 100});
   chassis.pid_wait();
-  chassis.pid_odom_set({{{-12_in, 60_in, 0_deg}, fwd, 30}}, true);
+
+  // Intake second ring
+  pros::delay(400);
+  intakeControl(true);
+  pros::delay(100);
+  chassis.pid_odom_set({{-64_in, 64_in, -45_deg}, fwd, 90});
   chassis.pid_wait();
-  chassis.pid_odom_set({{{-12_in, 35_in, -0_deg}, rev, 110},
-  {{-23_in, 44_in, -45_deg}, fwd, 110}}, true);
-  
-  
-// //   pros::delay(500);
-// //   IntakeTargetSpeed = 0;
-//   intakeControl(true);
-//   // Doinker rings
-//   chassis.pid_wait();
-//   rightdoinkerControl(true);
-//   chassis.pid_odom_set({{0_in, -48_in, 145_deg}, fwd, 90});
-//   chassis.pid_wait();
-//   leftdoinkerControl(true);
-
-//   // Back away from middle and raise doinkers
-//   chassis.pid_odom_set({{{15_in, -40_in, 135_deg}, rev, 110},
-//     {{0_in, -23_in, 0_deg}, rev, 110}}, true);
-//     chassis.pid_wait();
-//   rightdoinkerControl(false);
-//   leftdoinkerControl(false);
-//   intakeControl(false);
-//   pros::delay(200);
-
-//   // Move to and intake double stack
-//   chassis.pid_odom_set({{-27_in, -28_in, 245_deg}, fwd, 100});
-//   IntakeTargetSpeed = 100;
-//   chassis.pid_wait();
-  
-//   // Intake middle rings in line
-//   chassis.pid_odom_set({{0_in, -28_in, 90_deg}, fwd, 100});
-//   chassis.pid_wait();
-
-//   // Go to corner
-//   chassis.pid_odom_set({{-43_in, 6_in, -45_deg}, fwd, 80});
-//   chassis.pid_wait();
-
-//   // Intake corner ring and back away
-//   pros::delay(200);
-//   chassis.pid_odom_set(-10_in, 110, true);
+  pros::delay(200);  
+  // Go to tower
+  chassis.pid_odom_set({{-14_in, 16_in, -50_deg}, rev, 127}, true);
+  pros::delay(100);  
+  intakeControl(false);
 
 }

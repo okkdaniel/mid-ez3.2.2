@@ -25,15 +25,17 @@ enum armStates
     STOWED = 0,
     PRIMED = 1,
     SCORING = 2,
-    AUTOWS = 3
+    AUTOWS = 3,
+    LIFTED = 4
 };
 
 namespace armPositions
 {
     static double STOWED = 0;
-    static double PRIMED = 134;
+    static double PRIMED = 125;
     static double SCORING = 500;
     static double AUTOWS = 800;
+    static double LIFTED = 275;
 
 }
 

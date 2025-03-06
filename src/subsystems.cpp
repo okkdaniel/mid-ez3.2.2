@@ -52,11 +52,12 @@ void armTeleControl()
 
     bool userWantsToScore = master.get_digital(E_CONTROLLER_DIGITAL_L2);
 
+    bool lifted = master.get_digital(E_CONTROLLER_DIGITAL_A);
+
     if(master.get_digital_new_press(E_CONTROLLER_DIGITAL_L1))
     {
         userWantsToPrime = !userWantsToPrime;
     }
-
     if(userWantsToPrime == true)
     {
         if(userWantsToScore == true)
@@ -141,7 +142,7 @@ while(true)
 
 
     armMotor.move(Output);
-    pros::delay(20);
+    pros::delay(10);
     }
 
 
@@ -161,6 +162,10 @@ void armStateManager()
     else if (armState == armStates::SCORING)
     {
         armTarget = armPositions::SCORING;   
+    }
+    else if (armState == armStates::LIFTED)
+    {
+        armTarget = armPositions::LIFTED;
     }
 }
 
